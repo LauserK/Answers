@@ -11,12 +11,20 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cors());
 
+
+/* Controllers */
+var questionCtrl = require('./controllers/questions');
+
 /* Routers */
 var router = express.Router();
 
 router.get('/', function(req, res) {
    res.send("Welcome to KildareAnswers API");   
 });
+
+
+/* API Router */
+router.get('/questions', questionCtrl.getAllQuestions);
 
 app.use('/api', router);
 
