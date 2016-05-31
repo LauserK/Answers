@@ -26,13 +26,24 @@ exports.emailSignup = function(req, res, next) {
             .jsonp({message: {"username": "Username can't be empty"}})
   }
 
-  User.findOne({email: email}, function(err, existingUser){
-    if (existingUser) {
+  User.findOne({email: email}, function(err, existingEmail){
+    //If exists and user with the email
+    if (existingEmail) {
       return res
             .status(409)
             .jsonp({ message: { "email": 'Email is already taken.' }});
+    } else {
+        //If exists and user with Username
+        User.findOne({username: req.body.username }, function(err, existingUsername){
+            if (existingUsername){
+                return res
+                    .status(409)
+                    .jsonp({ message: { "username": 'Username is already taken.' }});
+            }
+        });
     }
-
+    
+    //Create user
     var user = new User({
       email        : email,
       password     : passwordHash.generate(req.body.password),
@@ -49,16 +60,14 @@ exports.emailSignup = function(req, res, next) {
           });
       });
   });
+  
 };
 
 exports.emailLogin = function(req, res, next) {    
 
     /* Detect if the values are empty */
     var email = req.body.email.toLowerCase();
-    var password = req.body.password;
-
-    console.log(email);
-    console.log(password);
+    var password = req.body.password;    
 
     if (email == "") {
       return res
@@ -85,7 +94,7 @@ exports.emailLogin = function(req, res, next) {
           .status(200)
           .jsonp({
             token: service.createToken(user),
-            user: user.email
+            user: user.username
           });
     });
 };
