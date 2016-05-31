@@ -14,6 +14,7 @@ app.use(cors());
 
 /* Controllers */
 var questionCtrl = require('./controllers/questions');
+var authCtrl = require('./controllers/auth');
 
 /* Routers */
 var router = express.Router();
@@ -22,6 +23,9 @@ router.get('/', function(req, res) {
    res.send("Welcome to KildareAnswers API");   
 });
 
+// Authentication routes
+router.post('/auth/signup', authCtrl.emailSignup);
+router.post('/auth/login', authCtrl.emailLogin);
 
 /* API Router */
 router.get('/questions', questionCtrl.getAllQuestions);
