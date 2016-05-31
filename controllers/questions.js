@@ -24,7 +24,7 @@ exports.getAllQuestions = function(req, res) {
 /* POST /api/questions/ - Create a question */
 exports.createQuestion = function(req, res) {
     
-    if(req.body.title == "" || req.body.title < 10 ){
+    if(req.body.title == "" || req.body.title < 10 || req.body.title == null){
         return res
             .status(400)
             .jsonp({ message: {"title": "Title can't be empty"}})
