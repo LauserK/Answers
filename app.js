@@ -11,6 +11,8 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cors());
 
+/* Middleware */
+var middleware = require('./middlewares');
 
 /* Controllers */
 var questionCtrl = require('./controllers/questions');
@@ -28,7 +30,8 @@ router.post('/auth/signup', authCtrl.emailSignup);
 router.post('/auth/login', authCtrl.emailLogin);
 
 /* API Router */
-router.get('/questions', questionCtrl.getAllQuestions);
+router.get('/questions',                                   questionCtrl.getAllQuestions);
+router.post('/questions', middleware.ensureAuthenticated,  questionCtrl.createQuestion);
 
 app.use('/api', router);
 
